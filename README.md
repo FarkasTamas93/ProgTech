@@ -1,1 +1,1 @@
-Programozási TechnoLógiák Beadandó
+Programozási Technológiák Beadandó

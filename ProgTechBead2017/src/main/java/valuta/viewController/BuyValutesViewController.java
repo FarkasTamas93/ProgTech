@@ -319,13 +319,16 @@ public class BuyValutesViewController {
 
     @FXML
     public void editBuyTextField() {
+        editBuyTextFieldMethod();
+    }
+
+    private void editBuyTextFieldMethod() {
         afterBoughtRemainingMoney.setText("");
         userValutaBuyTextField.setText("");
         userValutaBuyTextField.setDisable(false);
         menuButton.setDisable(false);
         allMoneyButton.setDisable(false);
     }
-
 //    public double calculation2()
 //    {
 //        if(selectedValute.getText().length()==0)

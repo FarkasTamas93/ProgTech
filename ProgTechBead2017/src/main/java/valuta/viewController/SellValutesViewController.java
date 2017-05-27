@@ -82,7 +82,7 @@ public class SellValutesViewController {
             menuButton.getItems().get(i).setOnAction(event -> {
                 menuButton.setText(((MenuItem) event.getSource()).getText());
                 chooseRateName = ((MenuItem) event.getSource()).getText();
-                currencyName.setText(" "+chooseRateName);
+                currencyName.setText(" " + chooseRateName);
             });
         }
     }
@@ -232,7 +232,10 @@ public class SellValutesViewController {
 
     @FXML
     public void okButton() {
+        okButtonMethod();
+    }
 
+    private void okButtonMethod() {
         if (okButtonIsValid()) {
             updateActualUserValutes();
             JpaService.getJpaServiceInstance().getValutesServiceJPA().updateValuteToDatabase(actualUserValutes);
@@ -247,42 +250,46 @@ public class SellValutesViewController {
 
     @FXML
     public void checkButton() {
-        if (isValid()) {
-            setTextFields();
-        }
+        setTextFields();
     }
 
     public void setTextFields() {
-        double result = CalculationService.sellValuteCalculation(userValuteTableView.getItems()
-                        .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateName)).getValue()
-                , Double.parseDouble(valutesToSellOutTextfield.getText()),
-                valuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateName)).getValuteRatePrice());
+        if (isValid()) {
+            double result = CalculationService.sellValuteCalculation(userValuteTableView.getItems()
+                            .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateName)).getValue()
+                    , Double.parseDouble(valutesToSellOutTextfield.getText()),
+                    valuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateName)).getValuteRatePrice());
 
-        if (result <= 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setHeaderText("You don't have enough valute to sell");
-            alert.setContentText("Sorry your valutes is not enought to sell the given amount values");
-            alert.setTitle("Not enought valutes");
-            afterSellValutesTextfield.setText("");
-            afterSellRemainingMoney.setText("");
-            remainingValutesAfterSell.setText("");
-            alert.showAndWait();
-        } else {
-            afterSellRemainingMoney.setText(Double.toString(actualUserValutes.getRemainMoney() + result));
-            afterSellValutesTextfield.setText(Double.toString(result));
-            remainingValutesAfterSell.setText(Double.toString(
-                    CalculationService.remainingValutes(userValuteTableView.getItems()
-                                    .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateName))
-                                    .getValue(),
-                            Double.parseDouble(valutesToSellOutTextfield.getText()))));
-            valutesToSellOutTextfield.setDisable(true);
-            menuButton.setDisable(true);
+            if (result <= 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setHeaderText("You don't have enough valute to sell");
+                alert.setContentText("Sorry your valutes is not enought to sell the given amount values");
+                alert.setTitle("Not enought valutes");
+                afterSellValutesTextfield.setText("");
+                afterSellRemainingMoney.setText("");
+                remainingValutesAfterSell.setText("");
+                alert.showAndWait();
+            } else {
+                afterSellRemainingMoney.setText(Double.toString(actualUserValutes.getRemainMoney() + result));
+                afterSellValutesTextfield.setText(Double.toString(result));
+                remainingValutesAfterSell.setText(Double.toString(
+                        CalculationService.remainingValutes(userValuteTableView.getItems()
+                                        .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateName))
+                                        .getValue(),
+                                Double.parseDouble(valutesToSellOutTextfield.getText()))));
+                valutesToSellOutTextfield.setDisable(true);
+                menuButton.setDisable(true);
+            }
         }
     }
 
     @FXML
     public void editSellButton() {
+        editSellButtonMethod();
+    }
+
+    private void editSellButtonMethod() {
         afterSellRemainingMoney.setText("");
         afterSellValutesTextfield.setText("");
         remainingValutesAfterSell.setText("");

@@ -95,7 +95,7 @@ public class BuyValutesForeignViewController {
             menuButton.getItems().get(i).setOnAction(event -> {
                 menuButton.setText(((MenuItem) event.getSource()).getText());
                 chooseRateNameFrom = ((MenuItem) event.getSource()).getText();
-                selectMenuText1.setText(" "+chooseRateNameFrom);
+                selectMenuText1.setText(" " + chooseRateNameFrom);
             });
         }
 
@@ -103,7 +103,7 @@ public class BuyValutesForeignViewController {
             menuButton2.getItems().get(i).setOnAction(event -> {
                 menuButton2.setText(((MenuItem) event.getSource()).getText());
                 chooseRateNameTo = ((MenuItem) event.getSource()).getText();
-                selectMenuText2.setText(" "+chooseRateNameTo);
+                selectMenuText2.setText(" " + chooseRateNameTo);
             });
         }
 
@@ -128,14 +128,12 @@ public class BuyValutesForeignViewController {
     }
 
     @FXML
-    private void okButton()
-    {
+    private void okButton() {
         okButtonMethods();
     }
 
-    private void okButtonMethods()
-    {
-        if(okButtonIsValid()) {
+    private void okButtonMethods() {
+        if (okButtonIsValid()) {
             updateActualUserValutes();
             updateActualUserValutes2();
             JpaService.getJpaServiceInstance().getValutesServiceJPA().updateValuteToDatabase(actualUserValutes);
@@ -145,7 +143,7 @@ public class BuyValutesForeignViewController {
 
     public boolean okButtonIsValid() {
 
-        if(isValid() == true) {
+        if (isValid() == true) {
             double result;
             try {
                 result = Double.parseDouble(remainingValutesAfterSell.getText());
@@ -223,6 +221,10 @@ public class BuyValutesForeignViewController {
 
     @FXML
     private void checkButton() {
+        checkButtonMethods();
+    }
+
+    public void checkButtonMethods() {
         if (isValid()) {
             double result = CalculationService.buyValutaFromOtherValuta(chooseRateNameFrom,
                     Double.parseDouble(valutesToSellOutTextfield.getText()),
@@ -245,13 +247,17 @@ public class BuyValutesForeignViewController {
                 menuButton.setDisable(true);
                 menuButton2.setDisable(true);
                 allMoneyButton.setDisable(true);
-//            }
             }
         }
     }
 
+
     @FXML
     public void editBuyButton() {
+        editBuyButtonMethods();
+    }
+
+    private void editBuyButtonMethods() {
         afterBuyTheActualPrice.setText("");
         remainingValutesAfterSell.setText("");
         valutesToSellOutTextfield.setText("");
@@ -262,13 +268,11 @@ public class BuyValutesForeignViewController {
     }
 
     @FXML
-    public void allInButton()
-    {
+    public void allInButton() {
         setBuyTextField();
     }
 
-    private void setBuyTextField()
-    {
+    private void setBuyTextField() {
         valutesToSellOutTextfield.setText(
                 Double.toString(CalculationService.buyValutaUseAllMoney(userValuteTableView.getItems()
                                 .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).getValue(),

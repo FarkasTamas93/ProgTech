@@ -283,26 +283,27 @@ public class BuyValutesViewController {
 
     @FXML
     private void checkRemainingMoneyButton() {
-        if (isValid()) {
-            setTextFields();
-        }
+
+        setTextFields();
     }
 
     public void setTextFields() {
-        double result = CalculationService.calculationToBuyValute(Double.parseDouble(remainingMoneyTextField.getText()), Double.parseDouble(userValutaBuyTextField.getText()), selectedValute.getText());
-        if (result < 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setHeaderText("Out of money:\n you need " + Math.abs(result) + " Euro");
-            alert.setContentText("Sorry your money is not enought to buy the given amount values");
-            alert.setTitle("Not enought money");
-            afterBoughtRemainingMoney.setText("");
-            alert.showAndWait();
-        } else {
-            afterBoughtRemainingMoney.setText(Double.toString(result));
-            userValutaBuyTextField.setDisable(true);
-            menuButton.setDisable(true);
-            allMoneyButton.setDisable(true);
+        if (isValid()) {
+            double result = CalculationService.calculationToBuyValute(Double.parseDouble(remainingMoneyTextField.getText()), Double.parseDouble(userValutaBuyTextField.getText()), selectedValute.getText());
+            if (result < 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setHeaderText("Out of money:\n you need " + Math.abs(result) + " Euro");
+                alert.setContentText("Sorry your money is not enought to buy the given amount values");
+                alert.setTitle("Not enought money");
+                afterBoughtRemainingMoney.setText("");
+                alert.showAndWait();
+            } else {
+                afterBoughtRemainingMoney.setText(Double.toString(result));
+                userValutaBuyTextField.setDisable(true);
+                menuButton.setDisable(true);
+                allMoneyButton.setDisable(true);
+            }
         }
     }
 //    public double calculation() {

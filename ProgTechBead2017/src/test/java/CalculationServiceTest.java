@@ -26,7 +26,7 @@ public class CalculationServiceTest {
     @Test
     public void convertToEuroTest()
     {
-        org.junit.Assert.assertEquals(0.6666666666666666,CalculationService.convertToEuro(10, 15),0);
+        org.junit.Assert.assertEquals(0.67,CalculationService.convertToEuro(10, 15),0);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class CalculationServiceTest {
     public void calculationToBuyValuteTest2()
     {
         double hufPrice=307.93;
-        org.junit.Assert.assertEquals(199.67525086870393,CalculationService.calculationToBuyValute(200,100,"HUF"),0);
+        org.junit.Assert.assertEquals(199.67,CalculationService.calculationToBuyValute(200,100,"HUF"),0);
     }
 
     @Ignore
@@ -61,6 +61,6 @@ public class CalculationServiceTest {
     @Test
     public void sellValuteCalculationTest2()
     {   //100/300
-        org.junit.Assert.assertEquals(0.3333333333333333,CalculationService.sellValuteCalculation(100,100,300),0);
+        org.junit.Assert.assertEquals(0.33,CalculationService.sellValuteCalculation(100,100,300),0);
     }
 }

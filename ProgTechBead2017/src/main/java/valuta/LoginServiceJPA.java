@@ -45,7 +45,6 @@ public class LoginServiceJPA {
         }
         return query.getResultList();
     }
-
     public List<String> getAllEmail() {
         Query query = null;
         try {
@@ -57,15 +56,25 @@ public class LoginServiceJPA {
         return query.getResultList();
     }
 
+//    public Login findUserByName(String name) {
+//        Query query = null;
+//        try {
+//            query = entityManager.createQuery("select p from Login p where userName = :userName", Login.class);
+//            query.setParameter("userName", name);
+//        }catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        }
+//        return (Login) query.getSingleResult();
+//    }
+
     public Login findUserByName(String name) {
         Query query = null;
         try {
-            query = entityManager.createQuery("select p from Login p where userName = :userName", Login.class);
-            query.setParameter("userName", name);
+            query = entityManager.createNativeQuery("select * from Login where userName = binary'"+ name+"'", Login.class);
         }catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        return (Login) query.getSingleResult();
+        return (Login)query.getSingleResult();
     }
 
 }

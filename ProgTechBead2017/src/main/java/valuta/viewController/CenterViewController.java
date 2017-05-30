@@ -271,4 +271,10 @@ public class CenterViewController {
     private void buyValuteForeignExchangeButton() {
         mainApp.showBuyValutesForeign();
     }
+
+    @FXML
+    private void statisticButton()
+    {
+        mainApp.showStatisticView();
+    }
 }

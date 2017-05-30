@@ -5,11 +5,11 @@
     <persistence-unit name="ValutaProgram" transaction-type="RESOURCE_LOCAL">
         <!-- Entity classes -->
         <class>valuta.model.Login</class>
-        <class>valuta.model.ValutesToDatabase</class>
+        <class>valuta.model.Valutes</class>
 
         <properties>
             <!-- The JDBC URL to the database instance -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/valutadatabase?useSSL=false&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/valuta?useSSL=false&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
 
             <!-- The database username -->
             <property name="javax.persistence.jdbc.user" value="admin" />
@@ -17,7 +17,6 @@
             <!-- The database password -->
             <property name="javax.persistence.jdbc.password" value="admin" />
 
-<!--            <property name="hibernate.hbm2ddl.auto" value="update"/> -->
         </properties>
     </persistence-unit>
 </persistence>

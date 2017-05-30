@@ -65,6 +65,25 @@ public class ReadDatesFromWeb {
         return proba;
     }
 
+    public static ValutesFromFixerIo valutesFromJsonByUrlName(String dateString) {
+        ValutesFromFixerIo proba = new ValutesFromFixerIo();
+        String urlNameString="http://api.fixer.io/" + dateString;
+        JSONObject temp = readJsonFromUrl(urlNameString);
+        proba.setValuteBase(temp.getString("base"));
+        proba.setValuteDate(LocalDate.parse(temp.get("date").toString()));
+        JSONObject jsonValues = temp.getJSONObject("rates");
+
+        Iterator<String> it = jsonValues.keys();
+        while (it.hasNext()) {
+            String key = it.next();
+            Double value = jsonValues.getDouble(key);
+            ValutesFromFixerIoRates rates = new ValutesFromFixerIoRates(key, value);
+            proba.getRatelist().add(rates);
+        }
+        FXCollections.sort(proba.getRatelist(), ((o1, o2) -> o1.getValuteRateName().compareTo(o2.getValuteRateName())));
+        return proba;
+    }
+
     public static ObservableList<Double> last30DaySelect(String name) {
         ObservableList<Double> values = FXCollections.observableArrayList();
         String webPage = "http://api.fixer.io/";
@@ -128,5 +147,9 @@ public class ReadDatesFromWeb {
         return index;
     }
 
+//    public static double getMinValuePast7day(String name)
+//    {
+//
+//    }
 
 }

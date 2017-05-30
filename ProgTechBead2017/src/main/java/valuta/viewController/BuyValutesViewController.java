@@ -248,6 +248,8 @@ public class BuyValutesViewController {
     }
 
     public boolean isValid() {
+        double result = 0.0;
+
         if (userValutaBuyTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
@@ -258,7 +260,7 @@ public class BuyValutesViewController {
             return false;
         }
         try {
-            Double.parseDouble(userValutaBuyTextField.getText());
+            result = Double.parseDouble(userValutaBuyTextField.getText());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
@@ -278,6 +280,20 @@ public class BuyValutesViewController {
             alert.showAndWait();
             return false;
         }
+        if (result != 0.0) {
+            String resultToString = Double.toString(result);
+            String[] priceList = resultToString.split("\\.");
+            if (priceList[1].length() > 2) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setHeaderText("Too much decimal!");
+                alert.setContentText("Please add maximum 2 decimal");
+                alert.setTitle("Too much decimal\n");
+                alert.showAndWait();
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -290,6 +306,7 @@ public class BuyValutesViewController {
     public void setTextFields() {
         if (isValid()) {
             double result = CalculationService.calculationToBuyValute(Double.parseDouble(remainingMoneyTextField.getText()), Double.parseDouble(userValutaBuyTextField.getText()), selectedValute.getText());
+
             if (result < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.initOwner(mainApp.getPrimaryStage());

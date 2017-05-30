@@ -162,6 +162,24 @@ public class Main extends Application {
         }
     }
 
+    public void showStatisticView()
+    {
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/StatisticView.fxml"));
+            AnchorPane statisticView = (AnchorPane) loader.load();
+            //Beállítjuk a loginController osztályban a mainapp-ot
+            StatisticViewController controller = loader.getController();
+            controller.setMainApp(this);
+            stage.setTitle("Statistic");
+            stage.setScene(new Scene(statisticView));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void stop() throws Exception {
         JpaService.getJpaServiceInstance().getEntityManager().close();

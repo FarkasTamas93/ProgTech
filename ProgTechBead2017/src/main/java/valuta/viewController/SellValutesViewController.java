@@ -299,6 +299,7 @@ public class SellValutesViewController {
     }
 
     public boolean isValid() {
+        double result = 0.0;
         if (valutesToSellOutTextfield.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
@@ -309,7 +310,7 @@ public class SellValutesViewController {
             return false;
         }
         try {
-            Double.parseDouble(valutesToSellOutTextfield.getText());
+            result = Double.parseDouble(valutesToSellOutTextfield.getText());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
@@ -324,11 +325,25 @@ public class SellValutesViewController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setHeaderText("Missing ValuteName");
-            alert.setContentText("Please choose which valute would you buy");
+            alert.setContentText("Please choose which valute would you sell");
             alert.setTitle("Missing Data");
             alert.showAndWait();
             return false;
         }
+        if (result != 0.0) {
+            String resultToString = Double.toString(result);
+            String[] priceList = resultToString.split("\\.");
+            if (priceList[1].length() > 2) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setHeaderText("Too much decimal!");
+                alert.setContentText("Please add maximum 2 decimal");
+                alert.setTitle("Too much decimal\n");
+                alert.showAndWait();
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -349,6 +364,27 @@ public class SellValutesViewController {
             return true;
         }
         return false;
+    }
+
+    @FXML
+    private void allInButton()
+    {
+        allInButtonMethod(chooseRateName);
+    }
+
+    private void allInButtonMethod(String name)
+    {
+        if (name.length() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setHeaderText("Missing ValuteName");
+            alert.setContentText("Please choose which valute would you sell");
+            alert.setTitle("Missing Data");
+            alert.showAndWait();
+            return;
+        }else {
+            valutesToSellOutTextfield.setText(Double.toString(actualUserValutes.getValutesList().get(ReadDatesFromWeb.getIndexFromActualCurrency(name)).get()));
+        }
     }
 
     //Kiszámolom hogy mennyi valutám van összesen az adott pénznembõl és ha többet vonok ki mint amennyim van akkor 0-t fog átadni és validálásnál alert lesz

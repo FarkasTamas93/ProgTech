@@ -24,11 +24,12 @@ public class LoginViewController {
         this.mainApp = mainApp;
     }
 
+    @FXML
     public void registerButton() {
         mainApp.showRegisterDialog();
     }
 
-
+    @FXML
     public void loginButton() {
         loginButtonMethods();
     }
@@ -41,12 +42,10 @@ public class LoginViewController {
     }
 
     private boolean loginCheck() {
-        LoginServiceJPA loginServiceJPA = JpaService.getJpaServiceInstance().getLoginServiceJPA();
-        List<String> allUserList = loginServiceJPA.getAllUser();
-
+        List<String> allUserList = JpaService.getJpaServiceInstance().getLoginServiceJPA().getAllUser();
         if (allUserList.contains(usernameField.getText())) {
-            Login loginUser = loginServiceJPA.findUserByName(usernameField.getText());
-            if (loginUser.getPassword().equals(passwordField.getText())) {
+            Login teszt = JpaService.getJpaServiceInstance().getLoginServiceJPA().findUserByName(usernameField.getText());
+            if (teszt.getPassword().equals(passwordField.getText())) {
                 return true;
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -57,15 +56,14 @@ public class LoginViewController {
                 alert.showAndWait();
                 return false;
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Unknown user");
-            alert.setHeaderText("Invalid username");
-            alert.setContentText("Please correct or register the account!");
-            alert.showAndWait();
-            return false;
         }
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(mainApp.getPrimaryStage());
+        alert.setTitle("Unknown user");
+        alert.setHeaderText("Invalid username");
+        alert.setContentText("Please correct or register the account!");
+        alert.showAndWait();
+        return false;
     }
 
     private Login loggedUser() {

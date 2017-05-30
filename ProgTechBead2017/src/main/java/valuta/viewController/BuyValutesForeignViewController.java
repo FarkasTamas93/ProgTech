@@ -94,16 +94,24 @@ public class BuyValutesForeignViewController {
         for (int i = 0; i < menuButton.getItems().size(); i++) {
             menuButton.getItems().get(i).setOnAction(event -> {
                 menuButton.setText(((MenuItem) event.getSource()).getText());
+                if (chooseRateNameFrom.length() != 0) {
+                    menuButton2.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).setDisable(false);
+                }
                 chooseRateNameFrom = ((MenuItem) event.getSource()).getText();
                 selectMenuText1.setText(" " + chooseRateNameFrom);
+                menuButton2.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(((MenuItem) event.getSource()).getText())).setDisable(true);
             });
         }
 
         for (int i = 0; i < menuButton2.getItems().size(); i++) {
             menuButton2.getItems().get(i).setOnAction(event -> {
                 menuButton2.setText(((MenuItem) event.getSource()).getText());
+                if (chooseRateNameTo.length() != 0) {
+                    menuButton.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameTo)).setDisable(false);
+                }
                 chooseRateNameTo = ((MenuItem) event.getSource()).getText();
                 selectMenuText2.setText(" " + chooseRateNameTo);
+                menuButton.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(((MenuItem) event.getSource()).getText())).setDisable(true);
             });
         }
 
@@ -176,6 +184,7 @@ public class BuyValutesForeignViewController {
 //    }
 
     public boolean isValid() {
+        double result = 0.0;
         if (valutesToSellOutTextfield.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
@@ -186,7 +195,7 @@ public class BuyValutesForeignViewController {
             return false;
         }
         try {
-            Double.parseDouble(valutesToSellOutTextfield.getText());
+            result = Double.parseDouble(valutesToSellOutTextfield.getText());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(mainApp.getPrimaryStage());
@@ -215,6 +224,19 @@ public class BuyValutesForeignViewController {
             alert.showAndWait();
             return false;
         }
+        if (result != 0.0) {
+            String resultToString = Double.toString(result);
+            String[] priceList = resultToString.split("\\.");
+            if (priceList[1].length() > 2) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setHeaderText("Too much decimal!");
+                alert.setContentText("Please add maximum 2 decimal");
+                alert.setTitle("Too much decimal\n");
+                alert.showAndWait();
+                return false;
+            }
+        }
 
         return true;
     }
@@ -231,7 +253,7 @@ public class BuyValutesForeignViewController {
                     chooseRateNameTo,
                     userValuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).getValue());
 
-            if (result < 0.0) {
+            if (result < -0.05) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.initOwner(mainApp.getPrimaryStage());
                 alert.setHeaderText("Not enough Valute to buy");
@@ -240,6 +262,14 @@ public class BuyValutesForeignViewController {
                 remainingValutesAfterSell.setText("");
                 afterBuyTheActualPrice.setText("");
                 alert.showAndWait();
+            } else if (result < 0.05 && result >= -0.05) {
+                result = 0.0;
+                remainingValutesAfterSell.setText(Double.toString(result));
+                afterBuyTheActualPrice.setText(Double.toString(CalculationService.afterBuyTheActualPriceSum(userValuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameTo)).getValue(), Double.parseDouble(valutesToSellOutTextfield.getText()))));
+                valutesToSellOutTextfield.setDisable(true);
+                menuButton.setDisable(true);
+                menuButton2.setDisable(true);
+                allMoneyButton.setDisable(true);
             } else {
                 remainingValutesAfterSell.setText(Double.toString(result));
                 afterBuyTheActualPrice.setText(Double.toString(CalculationService.afterBuyTheActualPriceSum(userValuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameTo)).getValue(), Double.parseDouble(valutesToSellOutTextfield.getText()))));
@@ -272,12 +302,36 @@ public class BuyValutesForeignViewController {
         setBuyTextField();
     }
 
+    private boolean setBuyTextFieldValid()
+    {
+        if (chooseRateNameFrom.length() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setHeaderText("Missing ValuteName");
+            alert.setContentText("Please choose which valute would you sell");
+            alert.setTitle("Missing Data");
+            alert.showAndWait();
+            return false;
+        }
+        if (chooseRateNameTo.length() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setHeaderText("Missing ValuteName");
+            alert.setContentText("Please choose which valute would you buy");
+            alert.setTitle("Missing Data");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
     private void setBuyTextField() {
-        valutesToSellOutTextfield.setText(
-                Double.toString(CalculationService.buyValutaUseAllMoney(userValuteTableView.getItems()
-                                .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).getValue(),
-                        valuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).getValuteRatePrice(),
-                        chooseRateNameTo)));
+        if (setBuyTextFieldValid()) {
+            valutesToSellOutTextfield.setText(
+                    Double.toString(CalculationService.buyValutaUseAllMoney(userValuteTableView.getItems()
+                                    .get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).getValue(),
+                            valuteTableView.getItems().get(ReadDatesFromWeb.getIndexFromActualCurrency(chooseRateNameFrom)).getValuteRatePrice(),
+                            chooseRateNameTo)));
+        }
     }
 
     public void updateActualUserValutes() {

@@ -35,8 +35,7 @@ public class ValutesServiceJPA {
     public ValutesToDatabase findValutesByName(String name) {
         Query query=null;
         try {
-            query = entityManager.createQuery("select p from ValutesToDatabase p where userName = :userName", ValutesToDatabase.class);
-            query.setParameter("userName", name);
+            query = entityManager.createNativeQuery("select * from valutes where binary userName = binary'"+ name+"'", ValutesToDatabase.class);
         }catch (IllegalArgumentException e)
         {
             e.printStackTrace();

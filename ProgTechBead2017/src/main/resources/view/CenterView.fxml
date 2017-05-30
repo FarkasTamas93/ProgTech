@@ -272,7 +272,7 @@
                         <Button mnemonicParsing="false" onAction="#buyButton" text="BuyValute" />
                         <Button mnemonicParsing="false" onAction="#sellValuteButton" text="SellValute" />
                         <Button mnemonicParsing="false" onAction="#buyValuteForeignExchangeButton" text="BuyValutesForeign" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" onAction="#statisticButton" text="Statistic" />
                     </buttons>
                   </ButtonBar>
                   <Label layoutX="451.0" layoutY="6.0" text="Welcome:" AnchorPane.leftAnchor="451.0" AnchorPane.rightAnchor="558.0" />
